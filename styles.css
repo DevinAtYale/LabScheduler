@@ -25,11 +25,16 @@ h1 {
     margin: 0 10px;
 }
 
+#calendar-container {
+    width: 80%;
+    overflow-x: auto;
+}
+
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px;
-    width: 80%;
+    width: 100%;
     background-color: #ddd;
 }
 
