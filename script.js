@@ -61,7 +61,7 @@ bookingForm.addEventListener('submit', (event) => {
 filterButton.addEventListener('click', () => {
     const selectedEquipment = equipmentSelect.value;
     const selectedLightSources = Array.from(lightSourceSelect.selectedOptions).map(option => option.value);
-    // Filtering logic to be implemented based on selectedEquipment and selectedLightSources
+    // Implement filtering logic here
     renderCalendar();
 });
 
