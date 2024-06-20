@@ -1,5 +1,6 @@
 const calendar = document.getElementById('calendar');
 const filterButton = document.getElementById('filter');
+const finalizeButton = document.getElementById('finalize');
 const equipmentSelect = document.getElementById('equipment');
 const lightSourceSelect = document.getElementById('light-source');
 const usernameInput = document.getElementById('username');
@@ -64,9 +65,6 @@ function handleMouseOver(event) {
 
 function handleMouseUp() {
     isMouseDown = false;
-    if (selectedSlots.length > 0) {
-        bookSlots();
-    }
 }
 
 function selectSlot(slot) {
@@ -113,6 +111,8 @@ filterButton.addEventListener('click', () => {
     // Implement filtering logic here
     renderCalendar();
 });
+
+finalizeButton.addEventListener('click', bookSlots);
 
 document.addEventListener('mouseup', () => {
     isMouseDown = false;
