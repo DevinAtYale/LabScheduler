@@ -57,6 +57,7 @@ h1 {
     height: 50px;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    position: relative;
 }
 
 .booking {
@@ -93,4 +94,10 @@ button {
 
 button:hover {
     background-color: #0056b3;
+}
+
+.checkbox {
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
