@@ -81,6 +81,10 @@ h1 {
     align-items: center;
 }
 
+.selected {
+    background-color: #cccccc;
+}
+
 #form {
     margin-top: 20px;
     width: 80%;
