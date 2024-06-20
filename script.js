@@ -1,11 +1,12 @@
 const calendar = document.getElementById('calendar');
-const bookingForm = document.getElementById('bookingForm');
 const filterButton = document.getElementById('filter');
 const equipmentSelect = document.getElementById('equipment');
 const lightSourceSelect = document.getElementById('light-source');
 const usernameInput = document.getElementById('username');
 
 let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+let isMouseDown = false;
+let selectedSlots = [];
 
 function renderCalendar() {
     calendar.innerHTML = '';
@@ -22,10 +23,10 @@ function renderCalendar() {
             hourDiv.className = 'hour';
             hourDiv.dataset.hour = hour;
             hourDiv.dataset.day = index;
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = 'checkbox';
-            hourDiv.appendChild(checkbox);
+            hourDiv.innerHTML = `<span>${hour}:00</span>`;
+            hourDiv.addEventListener('mousedown', handleMouseDown);
+            hourDiv.addEventListener('mouseover', handleMouseOver);
+            hourDiv.addEventListener('mouseup', handleMouseUp);
             dayDiv.appendChild(hourDiv);
         }
         calendar.appendChild(dayDiv);
@@ -49,28 +50,71 @@ function renderBookings() {
     });
 }
 
-bookingForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const formData = new FormData(bookingForm);
+function handleMouseDown(event) {
+    isMouseDown = true;
+    selectedSlots = [];
+    selectSlot(event.target);
+}
+
+function handleMouseOver(event) {
+    if (isMouseDown) {
+        selectSlot(event.target);
+    }
+}
+
+function handleMouseUp() {
+    isMouseDown = false;
+    if (selectedSlots.length > 0) {
+        bookSlots();
+    }
+}
+
+function selectSlot(slot) {
+    if (!slot.classList.contains('booking')) {
+        slot.classList.add('selected');
+        selectedSlots.push(slot);
+    }
+}
+
+function bookSlots() {
+    const username = usernameInput.value;
+    const equipment = equipmentSelect.value;
+    const lightSources = Array.from(lightSourceSelect.selectedOptions).map(option => option.value);
+
+    if (!username || !equipment || lightSources.length === 0) {
+        alert('Please fill out all the fields.');
+        selectedSlots.forEach(slot => slot.classList.remove('selected'));
+        return;
+    }
+
+    const date = new Date();
+    const startTime = selectedSlots[0].dataset.hour + ':00';
+    const endTime = (parseInt(selectedSlots[selectedSlots.length - 1].dataset.hour) + 1) + ':00';
+    const day = selectedSlots[0].dataset.day;
+
     const newBooking = {
-        username: formData.get('username'),
-        equipment: formData.get('equipment'),
-        date: formData.get('date'),
-        startTime: formData.get('startTime'),
-        endTime: formData.get('endTime'),
-        lightSources: Array.from(lightSourceSelect.selectedOptions).map(option => option.value)
+        username,
+        equipment,
+        date: date.toISOString().split('T')[0],
+        startTime,
+        endTime,
+        lightSources
     };
+
     bookings.push(newBooking);
     localStorage.setItem('bookings', JSON.stringify(bookings));
     renderCalendar();
-    bookingForm.reset();
-});
+}
 
 filterButton.addEventListener('click', () => {
     const selectedEquipment = equipmentSelect.value;
     const selectedLightSources = Array.from(lightSourceSelect.selectedOptions).map(option => option.value);
     // Implement filtering logic here
     renderCalendar();
+});
+
+document.addEventListener('mouseup', () => {
+    isMouseDown = false;
 });
 
 renderCalendar();
