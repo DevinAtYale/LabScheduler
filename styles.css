@@ -28,7 +28,6 @@ h1 {
 #calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(24, 50px);
     gap: 1px;
     width: 80%;
     background-color: #ddd;
