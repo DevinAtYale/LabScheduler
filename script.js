@@ -1,85 +1,69 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+const calendar = document.getElementById('calendar');
+const bookingForm = document.getElementById('bookingForm');
+const filterButton = document.getElementById('filter');
+const equipmentSelect = document.getElementById('equipment');
+const lightSourceSelect = document.getElementById('light-source');
+
+let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+function renderCalendar() {
+    calendar.innerHTML = '';
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    days.forEach(day => {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'day';
+        dayDiv.dataset.day = day;
+        const dayHeader = document.createElement('h3');
+        dayHeader.textContent = day;
+        dayDiv.appendChild(dayHeader);
+        for (let hour = 0; hour < 24; hour++) {
+            const hourDiv = document.createElement('div');
+            hourDiv.className = 'hour';
+            hourDiv.dataset.hour = hour;
+            dayDiv.appendChild(hourDiv);
+        }
+        calendar.appendChild(dayDiv);
+    });
+    renderBookings();
 }
 
-h1 {
-    margin-bottom: 20px;
+function renderBookings() {
+    bookings.forEach(booking => {
+        const start = new Date(booking.date + 'T' + booking.startTime);
+        const end = new Date(booking.date + 'T' + booking.endTime);
+        const day = start.getDay();
+        const dayDiv = document.querySelector(`.day[data-day="${['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][day]}"]`);
+        for (let hour = start.getHours(); hour < end.getHours(); hour++) {
+            const hourDiv = dayDiv.querySelector(`.hour[data-hour="${hour}"]`);
+            if (hourDiv) {
+                hourDiv.className = 'booking';
+                hourDiv.textContent = `${booking.equipment}: ${booking.startTime} - ${booking.endTime}`;
+            }
+        }
+    });
 }
 
-#controls {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    margin-bottom: 20px;
-}
+bookingForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(bookingForm);
+    const newBooking = {
+        equipment: formData.get('equipment'),
+        date: formData.get('date'),
+        startTime: formData.get('startTime'),
+        endTime: formData.get('endTime')
+    };
+    bookings.push(newBooking);
+    localStorage.setItem('bookings', JSON.stringify(bookings));
+    renderCalendar();
+    bookingForm.reset();
+});
 
-#controls label,
-#controls select,
-#controls button {
-    margin: 0 10px;
-}
+filterButton.addEventListener('click', () => {
+    const selectedEquipment = equipmentSelect.value;
+    const selectedLightSources = Array.from(lightSourceSelect.selectedOptions).map(option => option.value);
+    console.log(selectedEquipment, selectedLightSources);
+    // Implement filtering logic here
+    renderCalendar();
+});
 
-#calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(24, 50px);
-    gap: 1px;
-    width: 80%;
-    background-color: #ddd;
-}
-
-.day {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border: 1px solid #ccc;
-}
-
-.day h3 {
-    text-align: center;
-    background-color: #007bff;
-    color: white;
-    margin: 0;
-    padding: 5px;
-}
-
-.booking {
-    background-color: #28a745;
-    color: white;
-    margin: 1px;
-    padding: 5px;
-    text-align: center;
-}
-
-#form {
-    margin-top: 20px;
-    width: 80%;
-}
-
-#form form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-top: 10px;
-}
-
-button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
+renderCalendar();
