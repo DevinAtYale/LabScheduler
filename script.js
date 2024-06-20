@@ -3,6 +3,7 @@ const bookingForm = document.getElementById('bookingForm');
 const filterButton = document.getElementById('filter');
 const equipmentSelect = document.getElementById('equipment');
 const lightSourceSelect = document.getElementById('light-source');
+const usernameInput = document.getElementById('username');
 
 let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
 
@@ -20,6 +21,11 @@ function renderCalendar() {
             const hourDiv = document.createElement('div');
             hourDiv.className = 'hour';
             hourDiv.dataset.hour = hour;
+            hourDiv.dataset.day = index;
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'checkbox';
+            hourDiv.appendChild(checkbox);
             dayDiv.appendChild(hourDiv);
         }
         calendar.appendChild(dayDiv);
@@ -37,7 +43,7 @@ function renderBookings() {
             const hourDiv = dayDiv.querySelector(`.hour[data-hour="${hour}"]`);
             if (hourDiv) {
                 hourDiv.className = 'booking';
-                hourDiv.textContent = `${booking.equipment}: ${booking.startTime} - ${booking.endTime}`;
+                hourDiv.textContent = `${booking.username}, ${booking.equipment}, ${booking.lightSources.join(', ')}`;
             }
         }
     });
@@ -47,10 +53,12 @@ bookingForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const formData = new FormData(bookingForm);
     const newBooking = {
+        username: formData.get('username'),
         equipment: formData.get('equipment'),
         date: formData.get('date'),
         startTime: formData.get('startTime'),
-        endTime: formData.get('endTime')
+        endTime: formData.get('endTime'),
+        lightSources: Array.from(lightSourceSelect.selectedOptions).map(option => option.value)
     };
     bookings.push(newBooking);
     localStorage.setItem('bookings', JSON.stringify(bookings));
