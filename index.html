@@ -8,22 +8,46 @@
 </head>
 <body>
     <h1>Lab Equipment Scheduler</h1>
-    <div id="scheduler">
-        <div id="calendar"></div>
-        <div id="form">
-            <h2>Book a Time Slot</h2>
-            <form id="bookingForm">
-                <label for="equipment">Equipment:</label>
-                <input type="text" id="equipment" name="equipment" required>
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" required>
-                <label for="startTime">Start Time:</label>
-                <input type="time" id="startTime" name="startTime" required>
-                <label for="endTime">End Time:</label>
-                <input type="time" id="endTime" name="endTime" required>
-                <button type="submit">Book</button>
-            </form>
-        </div>
+    <div id="controls">
+        <label for="equipment">Equipment:</label>
+        <select id="equipment" name="equipment">
+            <option value="TRPL">TRPL</option>
+            <option value="PL Mapping">PL Mapping</option>
+            <option value="Streak Camera">Streak Camera</option>
+            <option value="ps-fs TA (free-space)">ps-fs TA (free-space)</option>
+            <option value="ps-fs TA (microscopy)">ps-fs TA (microscopy)</option>
+            <option value="ns-ms TA spec/imaging (right)">ns-ms TA spec/imaging (right)</option>
+            <option value="ns-ms TA imaging (left)">ns-ms TA imaging (left)</option>
+        </select>
+        <label for="light-source">Light Source:</label>
+        <select id="light-source" name="light-source" multiple>
+            <option value="visible OPA">visible OPA</option>
+            <option value="MIR OPA">MIR OPA</option>
+            <option value="Leukos (left)">Leukos (left)</option>
+            <option value="Leukos (right)">Leukos (right)</option>
+        </select>
+        <button id="filter">Filter</button>
+    </div>
+    <div id="calendar">
+        <div class="day" data-day="Monday"></div>
+        <div class="day" data-day="Tuesday"></div>
+        <div class="day" data-day="Wednesday"></div>
+        <div class="day" data-day="Thursday"></div>
+        <div class="day" data-day="Friday"></div>
+        <div class="day" data-day="Saturday"></div>
+        <div class="day" data-day="Sunday"></div>
+    </div>
+    <div id="form">
+        <h2>Book a Time Slot</h2>
+        <form id="bookingForm">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <label for="startTime">Start Time:</label>
+            <input type="time" id="startTime" name="startTime" required>
+            <label for="endTime">End Time:</label>
+            <input type="time" id="endTime" name="endTime" required>
+            <button type="submit">Book</button>
+        </form>
     </div>
     <script src="script.js"></script>
 </body>
