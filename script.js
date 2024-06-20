@@ -70,7 +70,7 @@ function handleMouseUp() {
 }
 
 function selectSlot(slot) {
-    if (!slot.classList.contains('booking')) {
+    if (!slot.classList.contains('booking') && !slot.classList.contains('selected')) {
         slot.classList.add('selected');
         selectedSlots.push(slot);
     }
@@ -87,15 +87,15 @@ function bookSlots() {
         return;
     }
 
-    const date = new Date();
-    const startTime = selectedSlots[0].dataset.hour + ':00';
-    const endTime = (parseInt(selectedSlots[selectedSlots.length - 1].dataset.hour) + 1) + ':00';
+    const date = new Date().toISOString().split('T')[0];  // Using current date for simplicity
+    const startTime = `${selectedSlots[0].dataset.hour}:00`;
+    const endTime = `${parseInt(selectedSlots[selectedSlots.length - 1].dataset.hour) + 1}:00`;
     const day = selectedSlots[0].dataset.day;
 
     const newBooking = {
         username,
         equipment,
-        date: date.toISOString().split('T')[0],
+        date,
         startTime,
         endTime,
         lightSources
@@ -103,6 +103,7 @@ function bookSlots() {
 
     bookings.push(newBooking);
     localStorage.setItem('bookings', JSON.stringify(bookings));
+    selectedSlots.forEach(slot => slot.classList.remove('selected'));
     renderCalendar();
 }
 
