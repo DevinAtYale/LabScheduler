@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Equipment Scheduler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Lab Equipment Scheduler</h1>
+    <div id="scheduler">
+        <div id="calendar"></div>
+        <div id="form">
+            <h2>Book a Time Slot</h2>
+            <form id="bookingForm">
+                <label for="equipment">Equipment:</label>
+                <input type="text" id="equipment" name="equipment" required>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" name="startTime" required>
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" name="endTime" required>
+                <button type="submit">Book</button>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
